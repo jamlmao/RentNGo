@@ -14,6 +14,9 @@ const inter = Inter({
 export const metadata = {
   title: "RentNGo",
   description: "RentNGo is a platform for renting and selling cars",
+  icons: {
+    icon: '/car-man.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
