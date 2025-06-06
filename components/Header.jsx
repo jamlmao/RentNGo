@@ -23,7 +23,7 @@ const isAdmin = false
           )}
         </Link>
 
-        
+        {/* if admin it will be routed to home instead of the user side buttons*/}
         <div className='flex items-center space-x-4'>
          { isAdminPage ? (
           <Link href={'/'}>
