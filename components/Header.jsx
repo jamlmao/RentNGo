@@ -9,7 +9,7 @@ const isAdmin = false
 
   
   return (
-    <header className="fixed top-0 w-full bg-white/80 backdrop-blur-sm border-b border-gray-200 z-50"> 
+    <header className="fixed top-0 w-full bg-[#05090eda] backdrop-blur-sm border-b border-gray-200 z-50"> 
       <nav className="mx-auto px-4 py-4 flex items-center justify-between">
         <Link href={isAdminPage ? '/admin' : '/'} className="flex">
           <Image src="/RentNGo_logo.png" 
