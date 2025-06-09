@@ -123,8 +123,8 @@
 
 
 .dotted-background{
-  background-color:#e0e3e6b6;
-  background-image: radial-gradient(rgba(216, 21, 21, 0.1) 1px, transparent 1px);
+  background-color:#1A1A1A;
+  background-image: radial-gradient(rgba(176, 190, 197, 0.10) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
