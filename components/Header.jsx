@@ -1,15 +1,17 @@
+"use client"
+
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs' 
 import { Button } from '@/components/ui/button'
 import { CircleUserRound, CarFront, Heart, ShieldUser, ArrowBigLeft, Home } from 'lucide-react'
-const Header = async({isAdminPage = false}) => {
+const Header = ({isAdminPage = false}) => {
 const isAdmin = false
 
   
   return (
-    <header className="fixed top-0 w-full bg-[#EBE9E8] backdrop-blur-sm border-b border-shadow-[#E8E0CF] z-50">
+    <header className="fixed top-0 w-full bg-red-800/90 backdrop-blur-sm border-b-red-800/90 border-shadow-[#E8E0CF] z-50">
       <nav className="mx-auto px-4 py-4 flex items-center justify-between">
         <Link href={isAdminPage ? '/admin' : '/'} className="flex">
           <Image src="/RentNGo_logo.png" 
@@ -29,29 +31,29 @@ const isAdmin = false
           <Link href={'/'}>
             <Button variant='outline' className='flex items-center gap-2'>
               <Home size={18} />
-              <span className='text-sm font-medium hidden md:inline'>Back to Home</span>
+              <span className='text-sm font-medium hidden md:inline hover:bg-black hover:text-white'>Back to Home</span>
             </Button>
          </Link>
         ) : (
           <SignedIn>
           <Link href={'/reservations'}>
-              <Button variant='outline'>
+              <Button className='hover:bg-white hover:text-black'>
                 <CarFront size={18} />
-                <span className='text-sm font-medium hidden md:inline'>My Reservations</span>
+                <span className='text-sm font-medium hidden md:inline '>My Reservations</span>
               </Button>
           </Link>
          {!isAdmin ? (
               <Link href={'/profile'}>
-                  <Button>
-                    <CircleUserRound size={18} />
-                    <span className='text-sm font-medium hidden md:inline'>Profile</span>
+                  <Button className='hover:bg-white hover:text-black'>
+                    <Heart size={18} />
+                    <span className='text-sm font-medium hidden md:inline '>Favorites</span>
                   </Button>
               </Link>
           ):(
               <Link href={'/admin'}>
-                  <Button>
+                  <Button className='hover:bg-black hover:text-white'>
                     <ShieldUser size={18} />
-                    <span className='text-sm font-medium hidden md:inline'>Admin</span>
+                    <span className='text-sm font-medium hidden md:inline '>Admin</span>
                   </Button>
               </Link>
           )}
@@ -62,7 +64,7 @@ const isAdmin = false
 
         <SignedOut>
           <SignInButton forceRedirectUrl='/'>
-            <Button variant='secondary'>Sign In</Button>
+            <Button variant='ghost' className='text-black hover:bg-black hover:text-white'>SignIn</Button>
           </SignInButton>
         </SignedOut>
 
