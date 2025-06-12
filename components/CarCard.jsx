@@ -14,7 +14,7 @@ const CarCard = ({car}) => {
    const handleWishlist = (e) => {}
    const router = useRouter();
   return (
-    <Card className='overflow-hidden hover:shadow-lg transition group py-0 '>
+    <Card className='overflow-hidden border-none hover:shadow-lg transition group py-0 bg-[#171716]'>
        <div className='relative w-full h-50'> 
         {car.images && car.images.length > 0? (
             <div className='relative w-full h-full'>
@@ -35,37 +35,37 @@ const CarCard = ({car}) => {
         <Button
              variant="ghost" 
             className={`absolute top-2 right-2 bg-white/90 rounded-full p-1.5
-             ${isWishlisted ? "bg-red-500" : "bg-white"}`}
+             ${isWishlisted ? "bg-[#E8E0CF]" : "bg-[#E8E0CF]"}`}
             onClick={handleWishlist}
         >
-            <Heart className={isWishlisted ? "fill-current text-white" : "text-gray-500"} size={20} />
+            <Heart className={isWishlisted ? "fill-current text-[#991B1B]" : "text-gray-500"} size={20} />
         </Button>
        </div>
 
        <CardContent className='p-4'>
         <div className='flex flex-col mb-2'>
-            <h3 className='text-lg font-bold line-clamp-1'>{car.brand} {car.model}</h3>
-            <span className='text-xl font-bold text-[#1A1A1A]-600'>${car.price.toLocaleString()}</span>
+            <h3 className='text-lg font-bold line-clamp-1 text-[#f5f1dd]'>{car.brand} {car.model}</h3>
+            <span className='text-xl font-bold text-[#f5f1dd]'>${car.price.toLocaleString()}</span>
         </div>
 
         <div className="text-gray-600 mb-2 flex items-center ">
-            <span className='text-sm'>{car.year}</span>
+            <span className='text-sm text-[#f5f1dd]'>{car.year}</span>
             <span className='mx-2'>•</span>
-            <span className='text-sm'>{car.transmission}</span>
+            <span className='text-sm text-[#f5f1dd]'>{car.transmission}</span>
             <span className='mx-2'>•</span>
-            <span className='text-sm'>{car.fuelType}</span>
+            <span className='text-sm text-[#f5f1dd]'>{car.fuelType}</span>
            
         </div>
 
         <div className="flex flex-wrap gap-1 mb-4">
-            <Badge variant="outline" className='bg-gray-50'>{car.bodyType}</Badge>
-            <Badge variant="outline" className='bg-gray-50'>{car.mileage.toLocaleString()} km</Badge>
-            <Badge variant="outline" className='bg-gray-50'>{car.color}</Badge>
+            <Badge variant="outline" className='bg-[#E8E0CF]'>{car.bodyType}</Badge>
+            <Badge variant="outline" className='bg-[#E8E0CF]'>{car.mileage.toLocaleString()} km</Badge>
+            <Badge variant="outline" className='bg-[#E8E0CF]'>{car.color}</Badge>
         </div>
 
         <div className='flex justify-end'>
             <Button 
-                className='flex-1'
+                className='flex-1 text-[#f5f1dd] bg-[#991B1B]'
                 onClick={() => router.push(`/cars/${car.id}`)}>
                     View Details
             </Button>

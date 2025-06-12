@@ -37,14 +37,14 @@ const isAdmin = false
         ) : (
           <SignedIn>
           <Link href={'/reservations'}>
-              <Button className='hover:bg-white hover:text-black'>
+              <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
                 <CarFront size={18} />
                 <span className='text-sm font-medium hidden md:inline '>My Reservations</span>
               </Button>
           </Link>
          {!isAdmin ? (
               <Link href={'/profile'}>
-                  <Button className='hover:bg-white hover:text-black'>
+                  <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
                     <Heart size={18} />
                     <span className='text-sm font-medium hidden md:inline '>Favorites</span>
                   </Button>

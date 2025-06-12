@@ -1,3 +1,18 @@
+/* 
+Color Palette (60-30-10 Rule)
+-----------------------------
+60% Dominant:     #E8E0CF   (Backgrounds, large areas)
+30% Secondary:    #991B1B   (Red-800, Headers, navigation bars)
+10% Accent:       #171716   (Black, buttons, highlights)
+
+Additional Colors:
+Label :        #deddd9 (For form labels)
+Text:       #faf7e3   (for buttons, sub text)
+Disabled Button:  #E1DFE9   (For disabled button backgrounds)
+*/
+
+
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -123,10 +138,11 @@
 
 
 .dotted-background{
-  background-color:#1A1A1A;
-  background-image: radial-gradient(rgba(176, 190, 197, 0.10) 1px, transparent 1px);
+  background-color:#171716;
+  background-image: radial-gradient(rgba(197, 197, 176, 0.1) 1px, transparent 1px);
   background-size: 30px 30px;
 }
+
 
 
 
