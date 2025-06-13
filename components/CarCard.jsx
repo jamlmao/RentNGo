@@ -65,7 +65,7 @@ const CarCard = ({car}) => {
 
         <div className='flex justify-end'>
             <Button 
-                className='flex-1 text-[#f5f1dd] bg-[#991B1B]'
+                className='flex-1 text-[#f5f1dd] bg-[#991B1B] hover:bg-[#E8E0CF] hover:text-[#991B1B]'
                 onClick={() => router.push(`/cars/${car.id}`)}>
                     View Details
             </Button>

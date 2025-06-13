@@ -15,7 +15,7 @@ export const metadata = {
   title: "RentNGo",
   description: "RentNGo is a platform for renting and selling cars",
   icons: {
-    icon: '/car.png',
+    icon: '/64px.png',
   },
 };
 

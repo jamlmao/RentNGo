@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import HomeSearch from "@/components/HomeSearch";
 import { ChevronRight } from "lucide-react";
-import { featuredCars } from "@/lib/data";
+import { featuredCars, carMakes } from "@/lib/data";
 import CarCard from "@/components/CarCard";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -30,9 +31,9 @@ export default function Home() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-2xl font-bold text-[#171716]"> Featured Cars</h2>
-          <Button  className='flex items-center hover:bg-[#991B1B] hover:text-[#E8E0CF] bg-[#171716]' asChild>
+          <Button  className='flex items-center hover:bg-[#171716] hover:text-[#E8E0CF] bg-[#991B1B]' asChild>
               <Link href="/cars">
-                   View All <ChevronRight className="ml-1 w-4 h-4" />
+                   View All<ChevronRight className="ml-1 w-4 h-4" />
               </Link>
           </Button>
         </div>
@@ -48,21 +49,36 @@ export default function Home() {
 
 
 
-    <section className="py-12">
+    <section className="py-12 bg-[#E8E0CF]">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold"> Featured Cars</h2>
-          <Button variant='ghost' className='flex items-center hover:bg-black hover:text-white' asChild>
+          <h2 className="text-2xl font-bold">Car Brands</h2>
+          <Button  className='flex items-center hover:bg-[#171716] hover:text-[#E8E0CF] bg-[#991B1B]' asChild>
               <Link href="/cars">
                    View All <ChevronRight className="ml-1 w-4 h-4" />
               </Link>
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredCars.map((car) => (
-            <CarCard key={car.id} car={car} />
-          ))}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+          {carMakes.map((brand) => {
+            return (
+            <Link 
+              key={brand.name}
+              href={`/cars?brand=${brand.name}`}
+              className="bg-[#E8E0CF] rounded-lg shadow-lg p-4 text-center  hover:shadow-red-900 transition cursor-pointer">
+
+              <div className="h-16 w-auto mx-auto mb-2 relative">
+                <Image src={brand.image} 
+                  alt={brand.name}
+                  fill
+                  className="w-full h-full object-contain"/>
+              </div>  
+              <h3 className="text-lg font-medium text-[#171716]">{brand.name}</h3>
+
+
+            </Link>
+          )})}
         </div>
 
       </div>
