@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import HomeSearch from "@/components/HomeSearch";
-import { ChevronRight } from "lucide-react";
+import { BookCheck, Car, ChevronRight, CircleDollarSign } from "lucide-react";
 import { featuredCars, carMakes } from "@/lib/data";
 import CarCard from "@/components/CarCard";
 import Link from "next/link";
@@ -84,6 +84,42 @@ export default function Home() {
       </div>
     </section>
 
+    <section className="py-16 bg-[#E8E0CF]">
+      <div className mx-auto px-4>
+        <h2 className="text-2xl font-bold text-center mb-12">Why Choose Us?</h2>
+
+        {/* Why choose us */}
+        <div className="grid grid-cols-1 md:grid-cols-3  gap-8">
+          <div className="text-center">
+            <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <Car className="h-8 w-8 text-[#E8E0CF]" />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Wide Selection</h3>
+            <p className="text-gray-600">We offer a wide selection of cars to choose from, so you can find the perfect car for your needs.</p>
+          </div>
+
+          <div className="text-center">
+            <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <BookCheck className="h-8 w-8 text-[#E8E0CF]" />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Best Prices</h3>
+            <p className="text-gray-600">We offer the best prices in the market, so you can save money on your car rental.</p>
+          </div>
+
+
+          <div className="text-center">
+            <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <CircleDollarSign className="h-8 w-8 text-[#E8E0CF]" />
+            </div>
+            <h3 className="text-lg font-bold mb-2">Easy Booking</h3>
+            <p className="text-gray-600">Booking a car is easy and fast, you can do it in a few clicks.</p>
+          </div>
+
+         
+          
+        </div>
+      </div>
+    </section>
 
    </div>
   );
