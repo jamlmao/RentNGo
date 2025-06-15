@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import HomeSearch from "@/components/HomeSearch";
 import { BookCheck, Car, ChevronRight, CircleDollarSign } from "lucide-react";
-import { featuredCars, carMakes } from "@/lib/data";
+import { featuredCars, carMakes, bodyTypes, faqItems } from "@/lib/data";
 import CarCard from "@/components/CarCard";
 import Link from "next/link";
 import Image from "next/image";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { SignedOut } from "@clerk/nextjs";
 
 export default function Home() {
   return (
@@ -85,7 +87,7 @@ export default function Home() {
     </section>
 
     <section className="py-16 bg-[#E8E0CF]">
-      <div className mx-auto px-4>
+      <div className="container mx-auto px-4">
         <h2 className="text-2xl font-bold text-center mb-12">Why Choose Us?</h2>
 
         {/* Why choose us */}
@@ -120,6 +122,85 @@ export default function Home() {
         </div>
       </div>
     </section>
+
+
+
+
+
+    <section className="py-12 bg-[#E8E0CF]">
+      <div className="container mx-auto px-4">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl font-bold">Available Cars</h2>
+          <Button  className='flex items-center hover:bg-[#171716] hover:text-[#E8E0CF] bg-[#991B1B]' asChild>
+              <Link href="/cars">
+                   View All <ChevronRight className="ml-1 w-4 h-4" />
+              </Link>
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {bodyTypes.map((bodyType) => {
+            return (
+            <Link 
+              key={bodyType.name}
+              href={`/cars?bodyType=${bodyType.name}`}
+              className="relative group cursor-pointer"
+            >
+              <div className="overflow-hidden rounded-lg flex justify-end h-28 mb-4 relative">
+                <Image
+                  src={bodyType.image}
+                  alt={bodyType.name}
+                  fill
+                  className="object-cover transition-transform duration-300 group-hover:scale-110"
+                />
+                {/* Overlay */}
+                <h3 className="absolute inset-0 bg-gradient-to-t from-[#E8E0CF] to-transparent text-center text-lg font-medium text-[#171716] p-2 rounded-lg flex items-end transition-opacity duration-300 group-hover:opacity-0">
+                  {bodyType.name}
+                </h3>
+              </div>
+            </Link>
+          )})}
+        </div>
+
+      </div>
+    </section>
+    
+
+    <section className="py-12 bg-[#E8E0CF]">
+      <div className="container mx-auto px-4">
+        <h2 className="text-2xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+        <Accordion type="single" collapsible className="w-full ">
+          {faqItems.map((faq,index) => {
+            return (
+              <AccordionItem key={index} value={`item-${index}`} className="border-b border-[#171716]">
+                <AccordionTrigger>{faq.question}</AccordionTrigger>
+                <AccordionContent>{faq.answer}</AccordionContent>
+              </AccordionItem>
+            ) 
+          })}
+        </Accordion>
+
+      </div>
+    </section>
+    
+
+    <section className="py-16 dotted-background text-[#E8E0CF]">
+      <div className="container mx-auto px-4 text-center">
+        <h2 className="text-2xl font-bold text-center mb-8 ">Ready to Rent a Car?</h2>
+        <p className="text-center mb-8 text-[#E8E0CF]">Book your car rental today and experience the freedom of the open road.</p>
+       <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Button size="lg" variant="secondary" className="bg-[#991B1B] text-[#E8E0CF] hover:bg-[#E8E0CF] hover:text-[#171716]" asChild>
+            <Link href="/cars"> Book Now </Link>
+          </Button>
+          <SignedOut>
+            <Button size="lg" variant="secondary" className="bg-[#991B1B] text-[#E8E0CF] hover:bg-[#E8E0CF] hover:text-[#171716]" asChild>
+              <Link href="/sign-up"> Book Now </Link>
+            </Button>
+          </SignedOut>
+       </div>
+      </div>
+    </section>
+
 
    </div>
   );
