@@ -89,9 +89,9 @@ const HomeSearch = () => {
       {isImageSearchActive && (
         <div className="mt-4">
           <form onSubmit={handleImageSubmit}>
-            <div>
+            <div className="border-2 border-dashed border-[#E8E0CF] rounded-3xl p-6 text-center">
               {imagePreview?( 
-                <div>
+                <div className="flex flex-col items-center">
                   <img  
                     src={imagePreview}
                     alt="Image Preview"
