@@ -5,6 +5,7 @@ import { Camera, Upload } from 'lucide-react'
 import { Button } from './ui/button'
 import { useDropzone } from 'react-dropzone'
 import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const HomeSearch = () => {
    const [searchText, setSearchText] = useState("");
@@ -12,10 +13,26 @@ const HomeSearch = () => {
    const [imagePreview, setImagePreview] = useState("");
    const [searchImage, setSearchImage] = useState(null);
    const [isUploading, setIsUploading] = useState(false);
-   
+   const [isProcessing, setIsProcessing] = useState(false);
+   const router = useRouter();
 
-   const handleTextSubmit = (e) => {}
-   const handleImageSubmit = (e) => {}
+   const handleTextSubmit = (e) => {
+    e.preventDefault();
+    if(!searchText.trim()) {
+      toast.error("Please enter a search term");
+      return;
+    }
+    router.push(`/cars?search=${encodeURIComponent(searchText)}`);
+   }
+   const handleImageSubmit = async(e) => {
+      e.preventDefault();
+      if(!searchImage) {
+        toast.error("Please upload an image");
+        return;
+      }
+     
+
+   }
 
    const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
@@ -99,6 +116,7 @@ const HomeSearch = () => {
                   
                   />
                   <Button
+                    className="bg-[#E8E0CF] text-[#171716] hover:bg-[#991B1B] hover:text-[#E8E0CF] hover:border-[#171716] "
                     variant="outline"
                     onClick={() => {
                       setImagePreview("");
@@ -135,6 +153,11 @@ const HomeSearch = () => {
                 </div>
               )}
             </div>
+            {imagePreview && (
+              <Button type="submit" className="w-full mt-2 bg-[#E8E0CF] text-[#171716] hover:bg-[#991B1B] hover:text-[#E8E0CF] hover:border-[#171716] " disabled={isUploading || isProcessing}>
+                {isUploading ? "Uploading..." : "Search Image"}
+              </Button>
+            )}
           </form>
         </div>
       )}
