@@ -6,11 +6,103 @@ generator client {
 }
 
 
-
-
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+
+model User{
+  id String @id @default(uuid())
+  clerkUserId String @unique
+  email String @unique
+  name String
+  imageUrl String?
+  phoneNumber String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role UserRole @default(USER)
+  bookmarkedCars UserBookmarkedCar[]
+  testDriveRequests TestDriveRequest[]
+
+ 
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+enum CarStatus {
+  AVAILABLE
+  SOLD
+  PENDING
+}
+
+
+model Car {
+  id String @id @default(uuid())
+  brand String
+  model String 
+  year Int
+  price Decimal @db.Decimal(10, 2)
+  mileage Int
+  fuelType String
+  transmission String
+  color String
+  seats Int?
+  bodyType String
+  description String?
+  featured Boolean @default(false)
+  images String[]
+  status CarStatus @default(AVAILABLE)
+  bookMarkedBy UserBookmarkedCar[]
+  testDriveRequests TestDriveRequest[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  @@index([brand,model])
+  @@index([bodyType])
+  @@index([price])
+  @@index([year])
+  @@index([status])
+  @@index([fuelType])
+  @@index([featured])
+ 
+}
+
+
+model DealershipInfo {
+  id String @id @default(uuid())
+  name String @default("Rent N' Go")
+  address String @default("123 Car Street, Car City, Car Country")
+  phoneNumber String @default("+1234567890")
+  email String @default("info@rentngo.com")
+  workingHours String @default("Mon-Fri: 9:00 AM - 5:00 PM")
+  createdAt DateTime @default(now())
+}
+
+
+model UserBookmarkedCar{
+  id String @id @default(uuid())
+  userId String
+  carId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  car Car @relation(fields: [carId], references: [id])
+}
+
+model TestDriveRequest{
+  id String @id @default(uuid())
+  userId String
+  carId String
+  status CarStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+  car Car @relation(fields: [carId], references: [id])
+}
+
+
