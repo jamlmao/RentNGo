@@ -31,9 +31,9 @@ export default function RootLayout({ children }) {
             {children}
           </main>
           <Toaster richColors/>
-          <footer className="bg-gray-100 py-4">
+          <footer className="bg-[#E8E0CF] py-4">
             <div className="container mx-auto">
-              <p className="text-center text-gray-500">
+              <p className="text-center text-[#171716]">
                 &copy; {new Date().getFullYear()} RentNGo. All rights reserved.
               </p>
             </div>
