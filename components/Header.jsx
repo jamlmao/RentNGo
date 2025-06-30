@@ -67,7 +67,7 @@ const isAdmin = user?.role === 'ADMIN';
 
         <SignedOut>
           <SignInButton forceRedirectUrl='/'>
-            <Button variant='ghost' className='text-black hover:bg-black hover:text-white'>SignIn</Button>
+            <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>SignIn</Button>
           </SignInButton>
         </SignedOut>
 
