@@ -51,10 +51,10 @@ export default function Home() {
 
 
 
-    <section className="py-12 bg-[#E8E0CF]">
+    <section className="py-12 dotted-background">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-2xl font-bold">Car Brands</h2>
+          <h2 className="text-2xl font-bold text-[#E8E0CF]">Car Brands</h2>
           <Button  className='flex items-center hover:bg-[#171716] hover:text-[#E8E0CF] bg-[#991B1B]' asChild>
               <Link href="/cars">
                    View All <ChevronRight className="ml-1 w-4 h-4" />
@@ -68,7 +68,7 @@ export default function Home() {
             <Link 
               key={brand.name}
               href={`/cars?brand=${brand.name}`}
-              className="bg-[#E8E0CF] rounded-lg shadow-lg p-4 text-center  hover:shadow-red-900 transition cursor-pointer">
+              className="bg-[#E8E0CF] rounded-lg shadow-lg p-4 text-center  hover:shadow-red-500 hover:scale-105 transition cursor-pointer">
 
               <div className="h-16 w-auto mx-auto mb-2 relative">
                 <Image src={brand.image} 
@@ -86,9 +86,9 @@ export default function Home() {
       </div>
     </section>
 
-    <section className="py-16 bg-[#E8E0CF]">
+    <section className="py-16 dotted-background">
       <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center mb-12">Why Choose Us?</h2>
+        <h2 className="text-2xl font-bold text-center mb-12 text-[#E8E0CF]">Why Choose Us?</h2>
 
         {/* Why choose us */}
         <div className="grid grid-cols-1 md:grid-cols-3  gap-8">
@@ -96,16 +96,16 @@ export default function Home() {
             <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <Car className="h-8 w-8 text-[#E8E0CF]" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Wide Selection</h3>
-            <p className="text-gray-600">We offer a wide selection of cars to choose from, so you can find the perfect car for your needs.</p>
+            <h3 className="text-lg font-bold mb-2 text-[#E8E0CF]">Wide Selection</h3>
+            <p className="text-[#E8E0CF]">We offer a wide selection of cars to choose from, so you can find the perfect car for your needs.</p>
           </div>
 
           <div className="text-center">
             <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <BookCheck className="h-8 w-8 text-[#E8E0CF]" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Best Prices</h3>
-            <p className="text-gray-600">We offer the best prices in the market, so you can save money on your car rental.</p>
+            <h3 className="text-lg font-bold mb-2 text-[#E8E0CF]">Best Prices</h3>
+            <p className="text-[#E8E0CF]">We offer the best prices in the market, so you can save money on your car rental.</p>
           </div>
 
 
@@ -113,8 +113,8 @@ export default function Home() {
             <div className="bg-[#991B1B] text-[#E8E0CF] rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <CircleDollarSign className="h-8 w-8 text-[#E8E0CF]" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Easy Booking</h3>
-            <p className="text-gray-600">Booking a car is easy and fast, you can do it in a few clicks.</p>
+            <h3 className="text-lg font-bold mb-2 text-[#E8E0CF]">Easy Booking</h3>
+            <p className="text-[#E8E0CF]">Booking a car is easy and fast, you can do it in a few clicks.</p>
           </div>
 
          

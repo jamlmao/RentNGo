@@ -32,9 +32,9 @@ const isAdmin = user?.role === 'ADMIN';
         <div className='flex items-center space-x-4'>
          { isAdminPage ? (
           <Link href={'/'}>
-            <Button variant='outline' className='flex items-center gap-2'>
+            <Button  className='flex items-center gap-2 hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
               <Home size={18} />
-              <span className='text-sm font-medium hidden md:inline hover:bg-black hover:text-white'>Back to Home</span>
+              <span className='text-sm font-medium hidden md:inline'>Back to Home</span>
             </Button>
          </Link>
         ) : (
@@ -54,7 +54,7 @@ const isAdmin = user?.role === 'ADMIN';
               </Link>
           ):(
               <Link href={'/admin'}>
-                  <Button className='hover:bg-black hover:text-white'>
+                  <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
                     <ShieldUser size={18} />
                     <span className='text-sm font-medium hidden md:inline '>Admin</span>
                   </Button>
