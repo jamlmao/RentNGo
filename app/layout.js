@@ -24,10 +24,10 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${inter.className} antialiased`}
+          className={`${inter.className} antialiased bg-[#E8E0CF]`}
         >
           <Header />
-          <main className="min-h-screen">
+          <main className="min-h-screen bg-[#E8E0CF]">
             {children}
           </main>
           <Toaster richColors/>
