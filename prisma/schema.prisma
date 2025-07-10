@@ -35,8 +35,8 @@ enum UserRole {
 
 enum CarStatus {
   AVAILABLE
-  SOLD
-  PENDING
+  RENTED
+  RESERVED
 }
 
 

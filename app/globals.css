@@ -11,8 +11,6 @@ Text:       #faf7e3   (for buttons, sub text)
 Disabled Button:  #E1DFE9   (For disabled button backgrounds)
 */
 
-
-
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -136,18 +134,14 @@ Disabled Button:  #E1DFE9   (For disabled button backgrounds)
   }
 }
 
-
 .dotted-background{
   background-color:#171716;
   background-image: radial-gradient(rgba(197, 197, 176, 0.1) 1px, transparent 1px);
   background-size: 30px 30px;
 }
 
-
-
-
 @layer utilities{
- 
+
   .gradient-title {
     @apply bg-gradient-to-r from-blue-500 to-purple-500 font-extrabold  tracking-tighter pr-2 pb-2 text-transparent bg-clip-text;
   }
