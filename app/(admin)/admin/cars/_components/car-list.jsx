@@ -43,9 +43,7 @@ const CarList = () => {
 
       {/* Show CarForm inline when showForm is true */}
       {showForm && (
-        <div className="my-4">
-          <CarForm />
-        </div>
+        <CarForm onClose={() => setShowForm(false)} />
       )}
 
         {/* Car List */}

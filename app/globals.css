@@ -146,3 +146,15 @@ Disabled Button:  #E1DFE9   (For disabled button backgrounds)
     @apply bg-gradient-to-r from-blue-500 to-purple-500 font-extrabold  tracking-tighter pr-2 pb-2 text-transparent bg-clip-text;
   }
 }
+
+/* Hide number input spinners for Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number input spinners for Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
