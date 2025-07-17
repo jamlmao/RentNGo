@@ -1,4 +1,5 @@
 "use server"
+/// this page is the controller
 
 import { auth } from '@clerk/nextjs/server';
 import {GoogleGenerativeAI} from '@google/generative-ai'
@@ -7,6 +8,7 @@ import { createClient } from '@supabase/supabase-js';
 import { cookies } from 'next/headers';
 import { db } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { CarData } from '@/lib/helper';
 
 
 async function fileToBase64(file){
@@ -217,3 +219,61 @@ export async function createCar({ carData, Images }) {
     }
   }
   
+
+
+export async function fetchCars(search = "", page = 1, limit = 10){
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    
+    let whereClause = {};
+
+    if(search){
+      whereClause.OR = [
+        { brand: { contains: search, mode: "insensitive" } },
+        { model: { contains: search, mode: "insensitive" } },
+        { color: { contains: search, mode: "insensitive" } }
+      ];
+    }
+
+    const cars = await db.car.findMany({
+      where,
+      orderBy:{
+        createdAt: "desc",
+      }
+
+    })
+
+    const serializedCars = cars.map((car) => ({
+      ...CarData(car),
+      isLiked: user?.bookmarkedCars?.some(b => b.carId === car.id),
+      hasTestDriveRequest: user?.testDriveRequests?.some(t => t.carId === car.id),
+      isRented: user?.rentedCars?.some(r => r.carId === car.id),
+    }));
+
+    return {
+      success: true,
+      data: serializedCars,
+      total: cars.length,
+      page,
+      limit,
+    }
+  }catch(error){
+    console.error("Error fetching cars:", error);
+    return {
+      success: false,
+      error: "Failed to fetch cars",
+    }
+  }
+
+}
+
+
+
