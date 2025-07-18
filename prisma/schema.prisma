@@ -40,6 +40,10 @@ enum CarStatus {
   RESERVED
 }
 
+enum CarDeleteStatus {
+  NOT_DELETED @map("0")
+  DELETED @map("1")
+}
 
 model Car {
   id String @id @default(uuid())
@@ -60,6 +64,7 @@ model Car {
   bookMarkedBy UserBookmarkedCar[]
   testDriveRequests TestDriveRequest[]
   rentedBy UserRentedCar[]
+  isDeleted CarDeleteStatus @default(NOT_DELETED)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

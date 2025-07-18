@@ -9,6 +9,7 @@ import { cookies } from 'next/headers';
 import { db } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { CarData } from '@/lib/helper';
+import { CarDeleteStatus } from '@prisma/client';
 
 
 async function fileToBase64(file){
@@ -130,6 +131,10 @@ export async function createCar({ carData, Images }) {
       });
   
       if (!user) throw new Error("User not found");
+      
+      if (user.role !== "ADMIN") {
+        throw new Error("Unauthorized: Admins only");
+      }
   
       // Create a unique folder name for this car's images
       const carId = uuidv4();
@@ -221,7 +226,7 @@ export async function createCar({ carData, Images }) {
   
 
 
-export async function fetchCars(search = "", page = 1, limit = 10){
+export async function getCars(search = ""){
   try {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
@@ -243,8 +248,11 @@ export async function fetchCars(search = "", page = 1, limit = 10){
       ];
     }
 
+    // Only fetch cars that are not soft deleted
+    whereClause.isDeleted = CarDeleteStatus.NOT_DELETED;
+
     const cars = await db.car.findMany({
-      where,
+      where: whereClause,
       orderBy:{
         createdAt: "desc",
       }
@@ -262,8 +270,6 @@ export async function fetchCars(search = "", page = 1, limit = 10){
       success: true,
       data: serializedCars,
       total: cars.length,
-      page,
-      limit,
     }
   }catch(error){
     console.error("Error fetching cars:", error);
@@ -276,4 +282,93 @@ export async function fetchCars(search = "", page = 1, limit = 10){
 }
 
 
+export async function softDeleteCar(carId,userId){
+  try{
+
+    const user = await db.user.findUnique({
+      where:{clerkUserId:userId},
+    });
+
+    if(!user){
+      throw new Error("User not found");
+    }
+
+    if(user.role !== "ADMIN"){
+      throw new Error("Unauthorized: Admins only");
+    }
+
+    const car = await db.car.findUnique({
+      where:{id:carId},
+      select:{images:true},
+    });
+
+    if(!car){
+      throw new Error("Car not found");
+    }
+
+    const updateCar = await db.car.update({
+      where:{id:carId},
+      data:{
+        isDeleted:CarDeleteStatus.DELETED,
+      }
+    })
+
+    revalidatePath("/admin/cars");
+
+    return {
+      success:true,
+      data:updateCar,
+    }
+   
+  }catch(error){
+    console.error("Error soft deleting car:", error);
+    return {
+      success:false,
+      error:"Failed to soft delete car",
+    }
+  }
+}
+
+export async function updateCarStatus(id, { status, featured }) {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const updateData = {};
+
+    if (status !== undefined) {
+      updateData.status = status;
+    }
+
+    if (featured !== undefined) {
+      updateData.featured = featured;
+    }
+
+    // Update the car
+    await db.car.update({
+      where: { id },
+      data: updateData,
+    });
+
+    // Revalidate the cars list page
+    revalidatePath("/admin/cars");
+
+    return {
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating car status:", error);
+    return {
+      success: false,
+      error: error.message,
+    };
+  }
+}
+
+
+// create a function for renting the car 
+// edit the schema to add soft delete 
+// create a function for updating the rents of the car and add history (admin side only)
+// create a function for dashboard to have the total rented count per car for the search filter 
+// edit the landing page too put the homesearch for the car in the user page 
 
