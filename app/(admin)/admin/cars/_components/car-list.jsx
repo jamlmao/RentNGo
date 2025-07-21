@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { CarIcon, Search, SquarePlus } from 'lucide-react'
+import { CarIcon, EllipsisVertical, Eye, Search, SquarePlus, Star, StarOff, Trash2 } from 'lucide-react'
 import { X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import CarForm from './car-form'
@@ -13,12 +13,21 @@ import { Card, CardContent} from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import Image from 'next/image'
+import { formatCurrency } from '@/lib/helper'
+import ImageCarouselModal from '@/components/ImageCarouselModal'
+import { Badge } from '@/components/ui/badge'
+import { toast } from 'sonner'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 
 const CarList = () => {
   
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [deleteCar,setDeleteCar] = useState(null);
+  const [deleteModalOpen,setDeleteModalOpen] = useState(false);
+
   const {
     loading:loadingCars,
     fn:fetchCars,
@@ -35,7 +44,7 @@ const CarList = () => {
 
   const {
     loading:loadingUpdateStatus,
-    fn:updateCar,
+    fn:updateCarFn,
     data:updateStatusData,
     error:updateStatusError,
   } = useFetch(updateCarStatus)
@@ -43,26 +52,15 @@ const CarList = () => {
   // Modal carousel state and handlers
   const [modalOpen, setModalOpen] = useState(false);
   const [carouselImages, setCarouselImages] = useState([]);
-  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const openCarousel = (images) => {
     setCarouselImages(images);
-    setCarouselIndex(0);
     setModalOpen(true);
   };
 
   const closeCarousel = () => {
     setModalOpen(false);
     setCarouselImages([]);
-    setCarouselIndex(0);
-  };
-
-  const prevImage = () => {
-    setCarouselIndex((prev) => (prev === 0 ? carouselImages.length - 1 : prev - 1));
-  };
-
-  const nextImage = () => {
-    setCarouselIndex((prev) => (prev === carouselImages.length - 1 ? 0 : prev + 1));
   };
 
   
@@ -70,6 +68,7 @@ const CarList = () => {
     fetchCars(search)
   },[search])
 
+ 
   useEffect(() => {
     if (carsData) {
       console.log("Cars Data:", carsData);
@@ -80,49 +79,86 @@ const CarList = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     // TODO: Implement search functionality
+    fetchCars(search)
   }
+
+ 
+
+  useEffect(()=>{
+
+    if(softDeleteData?.success){
+      toast.success("Car deleted successfully")
+      fetchCars(search)
+    }
+    
+    if(updateStatusData?.success){
+      toast.success("Car status updated successfully")
+      fetchCars(search)
+    }
+  },[updateStatusData,softDeleteData, search])
+
+
+  ///handle errors
+  useEffect(()=>{
+    if (carsError){
+      toast.error("Error fetching cars")
+    }
+    if(softDeleteError){
+      toast.error("Error deleting car")
+    }
+    if(updateStatusError){
+      toast.error("Error updating car status")
+    }
+  },[carsError,softDeleteError,updateStatusError])
+
+  const handleFeatured = async(car)=>{
+    await updateCarFn(car.id, {featured: !car.featured})
+
+  }
+
+
+  const handleStatus = async(car, newStatus)=>{
+    await updateCarFn(car.id, {status: newStatus})
+
+  }
+
+
+  const handleDelete = async(car)=>{
+     if(!car) return;
+      await softDelete(car.id)
+ 
+      setDeleteCar(null)
+      setDeleteModalOpen(false)
+  } 
+
+
+  const statusBadge = (status) => {
+    switch(status){
+      case 'AVAILABLE':
+        return <Badge className='bg-green-100 text-green-800 border-none hover:bg-green-200'>Available</Badge>
+      case 'RENTED':
+        return <Badge className='bg-red-100 text-red-800 border-none hover:bg-red-200'>Rented</Badge>
+      case 'RESERVED':
+        return <Badge className='bg-blue-100 text-blue-800 border-none hover:bg-blue-200'>Reserved</Badge>
+      default:
+        return <Badge className='bg-gray-100 text-gray-800 border-none hover:bg-gray-200'>{status}</Badge>
+    }
+  }
+
+
+
+
+
 
   return (
     <>
       {/* Carousel Modal for pictures */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
-          <div className="relative rounded-lg shadow-lg p-4 max-w-lg w-full flex flex-col items-center bg-white/70 backdrop-blur border border-gray-300">
-            <button
-              className="absolute top-2 right-2 text-red-600 font-bold text-2xl hover:text-red-800"
-              onClick={closeCarousel}
-            >
-              ✕
-            </button>
-            <div className="flex items-center justify-center w-full">
-              <button
-                className="p-2 text-3xl font-bold text-red-600 hover:text-red-800"
-                onClick={prevImage}
-                disabled={carouselImages.length <= 1}
-              >
-                &#8592;
-              </button>
-              <Image
-                src={carouselImages[carouselIndex]}
-                alt={`Car image ${carouselIndex + 1}`}
-                width={400}
-                height={300}
-                className="object-contain rounded shadow"
-              />
-              <button
-                className="p-2 text-3xl font-bold text-red-600 hover:text-red-800"
-                onClick={nextImage}
-                disabled={carouselImages.length <= 1}
-              >
-                &#8594;
-              </button>
-            </div>
-            <div className="mt-2 text-center text-sm text-gray-700 font-semibold">
-              {carouselIndex + 1} / {carouselImages.length}
-            </div>
-          </div>
-        </div>
-      )}
+      <ImageCarouselModal
+        isOpen={modalOpen}
+        images={carouselImages}
+        onClose={closeCarousel}
+        title="Car Gallery"
+      />
 
       <div className='space-y-4'>
         <div className="flex flex-row gap-4 items-center justify-between w-full">
@@ -163,29 +199,29 @@ const CarList = () => {
 
                 <Table>
                   <TableHeader>
-                    <TableRow className="border-b border-[#171716]">
+                    <TableRow className="border-b border-[#171716] hover:bg-transparent">
                       <TableHead className="w-12"></TableHead>
-                      <TableHead>Brand & Model</TableHead>
-                      <TableHead>Year</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Featured</TableHead>
-                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead className="text-lg font-semibold text-center">Brand & Model</TableHead>
+                      <TableHead className="text-lg font-semibold text-center">Year</TableHead>
+                      <TableHead className="text-lg font-semibold text-center">Price</TableHead>
+                      <TableHead className="text-lg font-semibold text-center">Status</TableHead>
+                      <TableHead className="text-lg font-semibold text-center">Featured</TableHead>
+                      <TableHead className="text-lg font-semibold text-center"></TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
 
                     {carsData.data.map((car)=>{
                       return(
-                       <TableRow key={car.id} >
-                          <TableCell className="w-10 h-10 rounded-md overflow-hidden border">
+                       <TableRow key={car.id} className="border-b border-[#171716] hover:bg-transparent">
+                          <TableCell className="w-20 h-20 rounded-md overflow-hidden border-none">
                             {car.images && car.images.length > 0 ? 
                             (
                               <Image
                                 src={car.images[0]}
                                 alt={car.brand + " " + car.model}
-                                height={40}
-                                width={40}
+                                height={100}
+                                width={100}
                                 className="w-full h-full object-cover cursor-pointer"
                                 priority
                                 onClick={() => car.images.length > 0 && openCarousel(car.images)}
@@ -196,6 +232,87 @@ const CarList = () => {
                                 <CarIcon className="w-6 h-6 text-gray-500" />
                               </div>  
                             )}
+                          </TableCell>
+                          <TableCell className="text-center">{car.brand + " " + car.model}</TableCell>
+                          <TableCell className="text-center">{car.year}</TableCell>
+                          <TableCell className="text-center">{formatCurrency(car.price)}</TableCell>
+                          <TableCell className="text-center">{statusBadge(car.status)}</TableCell>
+                          <TableCell className="text-center">
+                            <Button
+                             variant= "ghost"
+                             className='p-0'
+                             size="sm"
+                             onClick={()=>handleFeatured(car)}
+                             disabled={loadingUpdateStatus}
+                            >
+                              {car.featured ? (
+                                  <Star className='w-4 h-4 text-amber-500 fill-amber-500' />
+                                ) : (
+                                  <StarOff className='w-4 h-4 text-gray-500' />
+                              )}
+                            </Button>
+                           
+                          </TableCell>  
+                          <TableCell className="text-center">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                 variant="ghost"
+                                 className='p-0 h-8 w-8'
+                                 size="sm"
+                                >
+                                  <EllipsisVertical className='w-4 h-4' />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent>
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem 
+                                  onClick={()=> router.push(`/cars/${car.id}`)}
+                                >
+                                  <Eye className='w-4 h-4 mr-2' />
+                                  View
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuLabel>Status</DropdownMenuLabel>
+                                <DropdownMenuItem
+                                  onClick={()=>
+                                    handleStatus(car, "AVAILABLE")
+                                  }
+                                  disabled={
+                                    car.status === "AVAILABLE" || loadingUpdateStatus
+                                  }
+                                
+                                >Set Available</DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={()=>
+                                    handleStatus(car, "RENTED")
+                                  }
+                                  disabled={
+                                    car.status === "RENTED" || loadingUpdateStatus
+                                  }
+                                >Set Rented</DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={()=>
+                                    handleStatus(car, "RESERVED")
+                                  }
+                                  disabled={
+                                    car.status === "RESERVED" || loadingUpdateStatus
+                                  }
+                                >Set Reserved</DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem 
+                                  className='text-red-500'
+                                  onClick={()=>{
+                                    setDeleteCar(car)
+                                    setDeleteModalOpen(true)
+                                  }}
+                                  disabled={loadingSoftDelete}
+                                >
+                                  <Trash2 className='w-4 h-4 mr-2' />
+                                  Delete
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
                           </TableCell>
                          
                        </TableRow>
@@ -211,6 +328,44 @@ const CarList = () => {
               }
             </CardContent>
           </Card>
+
+
+          <Dialog open={deleteModalOpen} onOpenChange={setDeleteModalOpen}>
+            <DialogContent className='bg-[#E8E0CF] text-[#171716] shadow-md border border-[#171716]'>
+              <DialogHeader>
+                <DialogTitle>Delete Car</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete <span className="font-bold">{deleteCar?.brand}{" "}{deleteCar?.model}{" "}({deleteCar?.year})</span>? This action cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  className='bg-gray-200'
+                  onClick={()=>setDeleteModalOpen(false)}
+                  disabled={loadingSoftDelete}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={()=>handleDelete(deleteCar)}
+                  disabled={loadingSoftDelete}
+                >
+                  {loadingSoftDelete ? (
+                    <> 
+                     <Loader2 className='w-4 h-4 animate-spin' /> 
+                      Deleting...
+                    </> 
+                  ):(
+                    <>
+                      Delete
+                    </>
+                  )}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
       </div>
     </>
   )

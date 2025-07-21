@@ -282,8 +282,10 @@ export async function getCars(search = ""){
 }
 
 
-export async function softDeleteCar(carId,userId){
+export async function softDeleteCar(carId){
   try{
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
 
     const user = await db.user.findUnique({
       where:{clerkUserId:userId},
@@ -317,7 +319,7 @@ export async function softDeleteCar(carId,userId){
 
     return {
       success:true,
-      data:updateCar,
+      data:CarData(updateCar),
     }
    
   }catch(error){
@@ -334,6 +336,16 @@ export async function updateCarStatus(id, { status, featured }) {
     const { userId } = await auth();
     if (!userId) throw new Error("Unauthorized");
 
+    const user = await db.user.findUnique({
+      where:{clerkUserId:userId},
+    });
+
+    if(!user) throw new Error("User not found");
+
+    if(user.role !== "ADMIN"){
+      throw new Error("Unauthorized: Admins only");
+    }
+
     const updateData = {};
 
     if (status !== undefined) {
@@ -345,7 +357,7 @@ export async function updateCarStatus(id, { status, featured }) {
     }
 
     // Update the car
-    await db.car.update({
+    const updateCar = await db.car.update({
       where: { id },
       data: updateData,
     });
@@ -355,6 +367,7 @@ export async function updateCarStatus(id, { status, featured }) {
 
     return {
       success: true,
+      data: CarData(updateCar),
     };
   } catch (error) {
     console.error("Error updating car status:", error);
