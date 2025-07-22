@@ -4,7 +4,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 import { Button } from '@/components/ui/button'
-import { CircleUserRound, CarFront, Heart, ShieldUser, ArrowBigLeft, Home } from 'lucide-react'
+import { CircleUserRound, CarFront, Heart, ShieldUser, ArrowBigLeft, Home, Calendar } from 'lucide-react'
 import { checkUser } from '@/lib/checkUser'
 
 
@@ -39,26 +39,41 @@ const isAdmin = user?.role === 'ADMIN';
          </Link>
         ) : (
           <SignedIn>
-          <Link href={'/reservations'}>
+        
+         {!isAdmin ? (
+          <>
+           <Link href={'/reservations'}>
               <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
                 <CarFront size={18} />
                 <span className='text-sm font-medium hidden md:inline '>My Reservations</span>
               </Button>
-          </Link>
-         {!isAdmin ? (
+           </Link>
               <Link href={'/profile'}>
                   <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
                     <Heart size={18} />
                     <span className='text-sm font-medium hidden md:inline '>Favorites</span>
                   </Button>
               </Link>
+            </>
           ):(
-              <Link href={'/admin'}>
+            <>
+                <Link href={'/admin/bookings'}>
                   <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
-                    <ShieldUser size={18} />
-                    <span className='text-sm font-medium hidden md:inline '>Admin</span>
+                    <Calendar size={18} />
+                    <span className='text-sm font-medium hidden md:inline '>Bookings</span>
                   </Button>
-              </Link>
+                </Link>
+
+
+                <Link href={'/admin'}>
+                    <Button className='hover:bg-[#E8E0CF] hover:text-[#171716] text-[#E8E0CF]'>
+                      <ShieldUser size={18} />
+                      <span className='text-sm font-medium hidden md:inline '>Admin</span>
+                    </Button>
+                </Link>
+            
+            </>
+            
           )}
           
           </SignedIn>

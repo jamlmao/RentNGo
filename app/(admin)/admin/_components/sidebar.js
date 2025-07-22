@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Calendar, LayoutDashboard, Car, Cog } from 'lucide-react'
+import { Calendar, LayoutDashboard, Car, Cog, History } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -19,14 +19,14 @@ const routes = [
     href: '/admin/cars',
   },
   {
-    label: 'Test Drives',
+    label: 'Bookings',
     icon: Calendar,
-    href: '/admin/test-drives',
+    href: '/admin/bookings',
   },
   {
-    label: 'Settings',
-    icon: Cog,
-    href: '/admin/settings',
+    label: 'Car History',
+    icon: History,
+    href: '/admin/history',
   }
 ]
 

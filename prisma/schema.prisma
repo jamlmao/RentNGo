@@ -23,7 +23,6 @@ model User{
   updatedAt DateTime @updatedAt
   role UserRole @default(USER)
   bookmarkedCars UserBookmarkedCar[]
-  testDriveRequests TestDriveRequest[]
   rentedCars UserRentedCar[]
 
  
@@ -60,9 +59,9 @@ model Car {
   description String?
   featured Boolean @default(false)
   images String[]
+  rentalCount Int @default(0)
   status CarStatus @default(AVAILABLE)
   bookMarkedBy UserBookmarkedCar[]
-  testDriveRequests TestDriveRequest[]
   rentedBy UserRentedCar[]
   isDeleted CarDeleteStatus @default(NOT_DELETED)
   createdAt DateTime @default(now())
@@ -82,27 +81,6 @@ model Car {
 
 
 
-
-
-
-
-model DealershipInfo {
-  id String @id @default(uuid())
-  name String @default("Rent N' Go")
-  address String @default("123 Car Street, Car City, Car Country")
-  phoneNumber String @default("+1234567890")
-  email String @default("info@rentngo.com")
-  workingHours String @default("Mon-Fri: 9:00 AM - 5:00 PM")
-  createdAt DateTime @default(now())
-}
-
-
-
-
-
-
-
-
 model UserBookmarkedCar{
   id String @id @default(uuid())
   userId String
@@ -117,41 +95,14 @@ model UserBookmarkedCar{
   @@index([carId])
 }
 
-model TestDriveRequest{
-  id String @id @default(uuid())
-  carId String
-  car Car @relation(fields: [carId], references: [id])
-  userId String
-  user User @relation(fields: [userId], references: [id])
-  bookingDate DateTime @db.Date
-  startTime String //Format "HH:MM 24HOUR"
-  endTime String //Format "HH:MM 24HOUR"
-  status TestDriveStatus @default(PENDING)
-  notes String?
 
-
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([carId])
-  @@index([userId])
-  @@index([bookingDate])
-  @@index([startTime])
-  @@index([status])
-}
-
-enum TestDriveStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-}
 
 model UserRentedCar {
   id        String   @id @default(uuid())
   userId    String
   carId     String
   rentedAt  DateTime @default(now())
+  returnDate DateTime?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   car       Car      @relation(fields: [carId], references: [id], onDelete: Cascade)
 

@@ -95,7 +95,7 @@ const CarList = () => {
       toast.success("Car status updated successfully")
       fetchCars(search)
     }
-  },[updateStatusData,softDeleteData, search])
+  },[updateStatusData,softDeleteData])
 
 
   ///handle errors
@@ -144,9 +144,6 @@ const CarList = () => {
         return <Badge className='bg-gray-100 text-gray-800 border-none hover:bg-gray-200'>{status}</Badge>
     }
   }
-
-
-
 
 
 
@@ -322,7 +319,16 @@ const CarList = () => {
                 </Table> 
                </div>
               ):(
-                <div></div>
+                <div className='flex flex-col items-center justify-center py-12 px-4 text-center'>
+                  <CarIcon className='h-12 w-12 text-gray-500 mb-4' />
+                  <h3 className='text-lg font-medium text-[#171716]'>No cars found</h3>
+                  <p className='text-sm text-gray-500'>
+                    {search
+                      ? "No cars match your search"
+                      : "No cars available yet. Add a car to get started."
+                    }
+                  </p>
+                </div>
               )
               
               }
