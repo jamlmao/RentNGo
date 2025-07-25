@@ -1,5 +1,6 @@
 
 import React from 'react'
+import CarHistory from './_components/car-history'
 
 
 export const metadata ={
@@ -11,6 +12,7 @@ const HistoryPage = () => {
   return (
     <div className='p-4'>
         <h1 className='text-2xl font-bold'>Car User History</h1>
+        <CarHistory />
     </div>
   )
 }

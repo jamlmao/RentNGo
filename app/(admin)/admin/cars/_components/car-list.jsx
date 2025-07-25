@@ -19,6 +19,16 @@ import { Badge } from '@/components/ui/badge'
 import { toast } from 'sonner'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+
 
 const CarList = () => {
   
@@ -27,6 +37,9 @@ const CarList = () => {
   const [showForm, setShowForm] = useState(false);
   const [deleteCar,setDeleteCar] = useState(null);
   const [deleteModalOpen,setDeleteModalOpen] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const {
     loading:loadingCars,
@@ -116,7 +129,14 @@ const CarList = () => {
 
   }
 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = carsData.data.slice(indexOfFirstItem, indexOfLastItem) || [];
+  const totalPages = Math.ceil((carsData.data.length || 0) / itemsPerPage);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const handleStatus = async(car, newStatus)=>{
     await updateCarFn(car.id, {status: newStatus})
 
@@ -208,7 +228,7 @@ const CarList = () => {
                   </TableHeader>
                   <TableBody>
 
-                    {carsData.data.map((car)=>{
+                    {currentItems.map((car)=>{
                       return(
                        <TableRow key={car.id} className="border-b border-[#171716] hover:bg-transparent">
                           <TableCell className="w-20 h-20 rounded-md overflow-hidden border-none">
@@ -317,6 +337,27 @@ const CarList = () => {
                     })}
                   </TableBody>
                 </Table> 
+                <Pagination className='flex justify-center items-center py-4'>
+                        <PaginationContent>
+                          <PaginationItem>
+                            <PaginationPrevious onClick={() => handlePageChange(Math.max(currentPage - 1, 1))} className='bg-[#171716] text-white' />
+                          </PaginationItem>
+                          {[...Array(totalPages)].map((_, index) => (
+                            <PaginationItem key={index}>
+                              <PaginationLink
+                                onClick={() => handlePageChange(index + 1)}
+                                isActive={currentPage === index + 1}
+                                className='bg-[#E8E0CF] text-[#171716] border border-[#171716]'
+                              >
+                                {index + 1}
+                              </PaginationLink>
+                            </PaginationItem>
+                          ))}
+                          <PaginationItem>
+                            <PaginationNext onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))} className='bg-[#171716] text-white' />
+                          </PaginationItem>
+                        </PaginationContent>
+                      </Pagination>
                </div>
               ):(
                 <div className='flex flex-col items-center justify-center py-12 px-4 text-center'>
