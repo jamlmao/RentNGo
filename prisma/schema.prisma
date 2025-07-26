@@ -27,7 +27,7 @@ model User{
   role UserRole @default(USER)
   bookmarkedCars UserBookmarkedCar[]
   rentedCars UserRentedCar[]
-  carReservationApprovals CarReservationApproval[]
+  bookings Booking[]
  
 }
 
@@ -69,7 +69,7 @@ model Car {
   isDeleted CarDeleteStatus @default(NOT_DELETED)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  carReservationApprovals CarReservationApproval[]
+  bookings Booking[]
 
   @@index([brand,model])
   @@index([bodyType])
@@ -80,7 +80,7 @@ model Car {
   @@index([featured])
  
 }
-model CarReservationApproval {
+model Booking {
   id          String   @id @default(uuid())
   userId      String
   carId       String

@@ -1,4 +1,5 @@
 import React from 'react'
+import BookingList from './_components/booking-list'
 
 export const metadata ={
     title:"Admin - Bookings",
@@ -9,6 +10,7 @@ const BookingPage = () => {
   return (
     <div className='p-4'>
         <h1 className='text-2xl font-bold'>Bookings</h1>
+        <BookingList />
     </div>
   )
 }

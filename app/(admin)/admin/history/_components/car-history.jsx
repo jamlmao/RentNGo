@@ -96,18 +96,18 @@ const CarHistory = () => {
 
           {/* search bar */}
           <div className="flex flex-row gap-4 items-center justify-between w-full mt-2">
-          <form onSubmit={handleSearch} className="flex w-full max-w-md">
-            <div className="relative flex-1">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#171716]"/>
-              <Input
-                className="pl-9 w-full border border-[#171716] rounded-md focus:border-[#171716] focus:ring-2 focus:ring-[#171716]"
-                placeholder="Search history..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-          </form>
-        </div>
+            <form onSubmit={handleSearch} className="flex w-full max-w-md">
+              <div className="relative flex-1">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-[#171716]"/>
+                <Input
+                  className="pl-9 w-full border border-[#171716] rounded-md focus:border-[#171716] focus:ring-2 focus:ring-[#171716]"
+                  placeholder="Search history..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
+            </form>
+          </div>
 
 
 

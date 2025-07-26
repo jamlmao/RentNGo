@@ -23,11 +23,13 @@ async function fileToBase64(file){
 
 export async function CarImageWithAI(file){
     try {
+
+      //gemini api
         if(!process.env.GEMINI_API_KEY){
             throw new Error('GEMINI_API_KEY is not set');
         }
 
-        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+        const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY); 
         const model = genAI.getGenerativeModel({model: 'gemini-1.5-flash'});
 
         const base64 = await fileToBase64(file);
@@ -39,6 +41,8 @@ export async function CarImageWithAI(file){
             },
         };
 
+
+        /// gemini prompt
         const prompt = `
             Analyze the car image and extract the following information:
             1. Brand: The brand of the car
@@ -69,13 +73,13 @@ export async function CarImageWithAI(file){
            Only return the JSON object, no other text or comments.
         `;
 
-        const result = await model.generateContent([imagePart, prompt]);
-        const response = await result.response;
-        const text = response.text();
+        const result = await model.generateContent([imagePart, prompt]);  //the result of gemini prompt
+        const response = await result.response; // this is the response from the gemini api
+        const text = response.text(); 
         // Extract the first {...} block from the response
         const match = text.match(/{[\s\S]*}/);
         if (!match) throw new Error("No JSON object found in response");
-        const jsonResponse = JSON.parse(match[0]);
+        const jsonResponse = JSON.parse(match[0]); //converted gemini response to JSON format
 
 
         try{
@@ -183,7 +187,7 @@ export async function createCar({ carData, Images }) {
         }
   
         // Get the public URL for the uploaded file
-        const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/car-images/${filePath}`; // disable cache in config
+        const publicUrl = `${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}/storage/v1/object/public/car-images/${filePath}`; // disable cache in config
   
         imageUrls.push(publicUrl);
       }

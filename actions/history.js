@@ -24,6 +24,12 @@ export async function getUserHistory(search = " ") {
           whereClause.OR = [
             { car: { brand: { contains: search, mode: "insensitive" } } },
             { car: { model: { contains: search, mode: "insensitive" } } },
+            { user: { name: { contains: search, mode: "insensitive" } } },
+            { user: { email: { contains: search, mode: "insensitive" } } },
+            { user: { phoneNumber: { contains: search, mode: "insensitive" } } },
+            { user: { address: { contains: search, mode: "insensitive" } } },
+            { user: { city: { contains: search, mode: "insensitive" } } },
+            { user: { state: { contains: search, mode: "insensitive" } } },
           ];
 
           const searchYear = parseInt(search);
@@ -34,8 +40,7 @@ export async function getUserHistory(search = " ") {
 
         const userHistory = await db.userRentedCar.findMany({
             where: {
-                userId: user.id,
-                ...whereClause, // Ensure the whereClause is applied here
+                ...whereClause, // for the search functionality
             },
             include: {
                 car: {
@@ -63,7 +68,7 @@ export async function getUserHistory(search = " ") {
             },
         });
 
-        console.log('Raw User History:', userHistory); // Log raw data
+        console.log('Raw User History:', userHistory); // Log raw data delete this later 
 
         const serializedHistory = userHistory.map(entry => {
             const rentedAt = new Date(entry.rentedAt);
@@ -78,11 +83,6 @@ export async function getUserHistory(search = " ") {
                     price: totalPrice,
                 },
             };
-        });
-
-        console.log('Returning from getUserHistory:', {
-            success: true,
-            data: serializedHistory,
         });
 
         return {

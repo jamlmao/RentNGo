@@ -81,13 +81,6 @@ const CarList = () => {
     fetchCars(search)
   },[search])
 
- 
-  useEffect(() => {
-    if (carsData) {
-      console.log("Cars Data:", carsData);
-    }
-  }, [carsData]);
-
   
   const handleSearch = (e) => {
     e.preventDefault();
