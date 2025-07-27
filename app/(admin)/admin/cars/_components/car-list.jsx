@@ -200,7 +200,7 @@ const CarList = () => {
 
           <Card className='border border-[#171716] rounded-md shadow-md bg-[#E8E0CF]'>
             <CardContent className='p-0'>
-              {loadingCars && !carsData ?(
+              {loadingCars ?(
                 <div className="flex justify-center items-center py-12">
                   <Loader2 className='w-4 h-4 animate-spin text-gray-500' />
                 </div>
@@ -293,22 +293,6 @@ const CarList = () => {
                                   }
                                 
                                 >Set Available</DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={()=>
-                                    handleStatus(car, "RENTED")
-                                  }
-                                  disabled={
-                                    car.status === "RENTED" || loadingUpdateStatus
-                                  }
-                                >Set Rented</DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={()=>
-                                    handleStatus(car, "RESERVED")
-                                  }
-                                  disabled={
-                                    car.status === "RESERVED" || loadingUpdateStatus
-                                  }
-                                >Set Reserved</DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem 
                                   className='text-red-500'

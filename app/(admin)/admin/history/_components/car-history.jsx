@@ -19,18 +19,6 @@ import {
 } from "@/components/ui/pagination"
 import { Input } from '@/components/ui/input';
 
-// Debounce function
-const debounce = (func, delay) => {
-  let timeoutId;
-  return (...args) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
 
 const CarHistory = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -114,7 +102,7 @@ const CarHistory = () => {
         
         <Card className='border border-[#171716] rounded-md shadow-md bg-[#E8E0CF]'>
           <CardContent>
-            {loadingHistory && !historyData ? (
+            {loadingHistory ? (
               <div className="flex justify-center items-center py-12">
                 <Loader2 className='w-4 h-4 animate-spin text-gray-500' />
               </div>
@@ -134,26 +122,26 @@ const CarHistory = () => {
                           </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {currentItems.map((entry) => (
-                          <TableRow key={entry.id} className="border-b border-[#171716] hover:bg-transparent">
+                        {currentItems.map((item) => (
+                          <TableRow key={item.id} className="border-b border-[#171716] hover:bg-transparent">
                             <TableCell className="w-20 h-20 rounded-md overflow-hidden border-none">
                               <Image
-                                src={entry.car.images[0]}
-                                alt={`${entry.car.brand} ${entry.car.model}`}
+                                src={item.car.images[0]}
+                                alt={`${item.car.brand} ${item.car.model}`}
                                 width={100}
                                 height={100}
                                 className="w-full h-full object-cover cursor-pointer"
                                 priority  
-                                onClick={() => openCarousel(entry.car.images)}
+                                onClick={() => openCarousel(item.car.images)}
                               />
                             </TableCell>
-                            <TableCell className="text-lg font-semibold text-center">{entry.car.brand} {entry.car.model}</TableCell>
-                            <TableCell className="text-lg font-semibold text-center">${entry.car.price}</TableCell>
-                            <TableCell className="text-lg font-semibold text-center">{entry.user.name}</TableCell>
-                            <TableCell className="text-lg font-semibold text-center">{entry.user.phoneNumber}</TableCell>
-                            <TableCell className="text-lg font-semibold text-center">{entry.user.address}, {entry.user.city}, {entry.user.state}</TableCell>
-                            <TableCell className="text-lg font-semibold text-center">{new Date(entry.rentedAt).toLocaleDateString()}</TableCell>  
-                            <TableCell className="text-lg font-semibold text-center">{entry.returnDate ? new Date(entry.returnDate).toLocaleDateString() : 'N/A'}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">{item.car.brand} {item.car.model}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">${item.car.price}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">{item.user.name}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">{item.user.phoneNumber}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">{item.user.address}, {item.user.city}, {item.user.state}</TableCell>
+                            <TableCell className="text-lg font-semibold text-center">{new Date(item.rentedAt).toLocaleDateString()}</TableCell>  
+                            <TableCell className="text-lg font-semibold text-center">{item.returnDate ? new Date(item.returnDate).toLocaleDateString() : 'N/A'}</TableCell>
                           </TableRow>
                         ))}
                       </TableBody>  
